@@ -14,12 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Redireciona a rota principal (a URL raiz '/') para a lista de jogos.
+// Nova rota principal: aponta para a view 'welcome' que acabamos de criar.
 Route::get('/', function () {
-    return redirect()->route('games.index');
+    return view('welcome');
 });
 
 // A rota de recurso para o controlador de jogos.
 // Ela cria automaticamente rotas para index, create, store, etc.
 Route::resource('games', GameController::class);
-
