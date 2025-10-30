@@ -1,15 +1,9 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('games.add_new') }}</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
-</head>
-<body class="p-4 sm:p-8 bg-gray-100 flex items-center justify-center min-h-screen">
+@extends('layouts.app')
+
+@section('title', __('games.add_new'))
+
+@section('content')
+<div class="p-4 sm:p-8 bg-gray-100 flex items-center justify-center min-h-screen-nav">
     <div class="w-full max-w-xl bg-white rounded-xl shadow-2xl p-6 sm:p-10">
         <h1 class="text-3xl sm:text-4xl font-extrabold text-center text-indigo-700 mb-8">{{ __('games.add_new') }}</h1>
         
@@ -80,5 +74,5 @@
             </div>
         </form>
     </div>
-</body>
-</html>
+</div>
+@endsection

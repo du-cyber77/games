@@ -13,40 +13,22 @@ class GameController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-{
-    // Inicia a query para buscar jogos
-    $query = Game::query();
+    {
+        // 1. Inicia a query e aplica o escopo que criamos
+        $query = Game::query()->filter($request);
 
-    // Lógica da Busca (já implementada)
-    if ($request->has('search') && $request->search != '') {
-        $searchTerm = $request->search;
-        $query->where(function($q) use ($searchTerm) {
-            $q->where('title', 'like', "%{$searchTerm}%")
-              ->orWhere('developer', 'like', "%{$searchTerm}%");
-        });
+        // 2. Aplica a paginação
+        $games = $query->paginate(10);
+
+        // 3. Retorna a view. 
+        // Precisamos passar os parâmetros de ordenação de volta para a view
+        // para que os links de cabeçalho da tabela funcionem.
+        return view('games.index', [
+            'games' => $games,
+            'sortBy' => $request->query('sort_by', 'created_at'),
+            'sortDirection' => $request->query('sort_direction', 'desc')
+        ]);
     }
-
-    // --- INÍCIO DA NOVA LÓGICA DE ORDENAÇÃO ---
-    // Define as colunas permitidas para ordenação para segurança
-    $sortableColumns = ['title', 'developer', 'release_year'];
-    $sortBy = $request->query('sort_by', 'created_at'); // Padrão: ordenar por data de criação
-    $sortDirection = $request->query('sort_direction', 'desc'); // Padrão: descendente (mais novos primeiro)
-
-    // Valida se a coluna e a direção são válidas
-    if (in_array($sortBy, $sortableColumns) && in_array($sortDirection, ['asc', 'desc'])) {
-        $query->orderBy($sortBy, $sortDirection);
-    } else {
-        // Fallback para a ordenação padrão se os parâmetros forem inválidos
-        $query->orderBy('created_at', 'desc');
-    }
-    // --- FIM DA NOVA LÓGICA DE ORDENAÇÃO ---
-
-    // Aplica a paginação
-    $games = $query->paginate(10);
-
-    // Retorna a view com os jogos e os parâmetros de ordenação
-    return view('games.index', compact('games', 'sortBy', 'sortDirection'));
-}
 
     /**
      * Show the form for creating a new resource.
@@ -71,7 +53,7 @@ class GameController extends Controller
      */
     public function show(Game $game)
     {
-        // Não implementado, mas pode ser usado para uma página de detalhes do jogo
+        return view('games.show', compact('game'));
     }
 
     /**

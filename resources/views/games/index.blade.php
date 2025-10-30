@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('games.game_list') }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-100 min-h-screen">
+@extends('layouts.app')
 
+@section('title', __('games.game_list'))
+
+@section('content')
     <div class="container mx-auto p-6">
         <h1 class="text-4xl font-bold mb-8 text-center text-gray-800">{{ __('games.my_games') }}</h1>
 
@@ -30,54 +25,75 @@
             </div>
         @endif
 
-        <div class="mb-6 flex justify-between items-center">
-            <a href="{{ route('games.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
-                {{ __('games.add_new') }}
-            </a>
-        </div>
-
-        <div class="bg-white rounded-lg shadow-xl overflow-hidden">
+        <div class="bg-white rounded-lg shadow-xl overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
-    <tr>
-        @php
-            // Lógica para inverter a direção da ordenação ao clicar novamente
-            $invertDirection = ($sortDirection == 'asc') ? 'desc' : 'asc';
-        @endphp
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            <a href="{{ route('games.index', ['sort_by' => 'title', 'sort_direction' => $sortBy == 'title' ? $invertDirection : 'asc', 'search' => request('search')]) }}">
-                {{ __('games.title') }}
-                @if($sortBy == 'title')
-                    <span>{{ $sortDirection == 'asc' ? '▲' : '▼' }}</span>
-                @endif
-            </a>
-        </th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            <a href="{{ route('games.index', ['sort_by' => 'developer', 'sort_direction' => $sortBy == 'developer' ? $invertDirection : 'asc', 'search' => request('search')]) }}">
-                {{ __('games.developer') }}
-                @if($sortBy == 'developer')
-                    <span>{{ $sortDirection == 'asc' ? '▲' : '▼' }}</span>
-                @endif
-            </a>
-        </th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            <a href="{{ route('games.index', ['sort_by' => 'release_year', 'sort_direction' => $sortBy == 'release_year' ? $invertDirection : 'asc', 'search' => request('search')]) }}">
-                {{ __('games.release_year') }}
-                @if($sortBy == 'release_year')
-                    <span>{{ $sortDirection == 'asc' ? '▲' : '▼' }}</span>
-                @endif
-            </a>
-        </th>
-        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-            {{ __('games.actions') }}
-        </th>
-    </tr>
-</thead>
+                    <tr>
+                        @php
+                            $invertDirection = ($sortDirection == 'asc') ? 'desc' : 'asc';
+                        @endphp
+                        
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <a href="{{ route('games.index', ['sort_by' => 'title', 'sort_direction' => $sortBy == 'title' ? $invertDirection : 'asc', 'search' => request('search')]) }}">
+                                {{ __('games.title') }}
+                                @if($sortBy == 'title')
+                                    <span>{{ $sortDirection == 'asc' ? '▲' : '▼' }}</span>
+                                @endif
+                            </a>
+                        </th>
+                        
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <a href="{{ route('games.index', ['sort_by' => 'developer', 'sort_direction' => $sortBy == 'developer' ? $invertDirection : 'asc', 'search' => request('search')]) }}">
+                                {{ __('games.developer') }}
+                                @if($sortBy == 'developer')
+                                    <span>{{ $sortDirection == 'asc' ? '▲' : '▼' }}</span>
+                                @endif
+                            </a>
+                        </th>
+                        
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <a href="{{ route('games.index', ['sort_by' => 'release_year', 'sort_direction' => $sortBy == 'release_year' ? $invertDirection : 'asc', 'search' => request('search')]) }}">
+                                {{ __('games.release_year') }}
+                                @if($sortBy == 'release_year')
+                                    <span>{{ $sortDirection == 'asc' ? '▲' : '▼' }}</span>
+                                @endif
+                            </a>
+                        </th>
+                        
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Plataforma
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Gênero
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Status
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Nota
+                        </th>
+                        
+                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ __('games.actions') }}
+                        </th>
+                    </tr>
+                </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse ($games as $game)
                         <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                {{ $game->title }}
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <div class="flex items-center">
+                                    @if($game->cover_image_url)
+                                        <img class="w-10 h-14 object-cover rounded-md shadow-lg mr-4 flex-shrink-0" src="{{ $game->cover_image_url }}" alt="Capa de {{ $game->title }}">
+                                    @else
+                                        <div class="w-10 h-14 bg-gray-200 rounded-md shadow-lg mr-4 flex-shrink-0 flex items-center justify-center">
+                                            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        </div>
+                                    @endif
+                                    <a href="{{ route('games.show', $game->id) }}" class="truncate font-semibold text-indigo-600 hover:text-indigo-800 transition duration-150 ease-in-out">
+                                        {{ $game->title }}
+                                    </a>
+                                </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ $game->developer }}
@@ -85,6 +101,29 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ $game->release_year }}
                             </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ $game->platform ?? 'N/A' }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ $game->genre ?? 'N/A' }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                    @if($game->status == 'Jogando') bg-blue-100 text-blue-800 
+                                    @elseif($game->status == 'Finalizado') bg-green-100 text-green-800
+                                    @elseif($game->status == 'Pausado') bg-yellow-100 text-yellow-800
+                                    @else bg-gray-100 text-gray-800 @endif">
+                                    {{ $game->status }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-yellow-500">
+                                @if($game->rating)
+                                    {{ str_repeat('★', $game->rating) }}<span class="text-gray-300">{{ str_repeat('☆', 5 - $game->rating) }}</span>
+                                @else
+                                    <span class="text-gray-400">N/A</span>
+                                @endif
+                            </td>
+                            
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <a href="{{ route('games.edit', $game->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-4">
                                     {{ __('games.edit') }}
@@ -100,7 +139,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="text-center py-6 text-gray-500">Nenhum jogo encontrado.</td>
+                            <td colspan="8" class="text-center py-6 text-gray-500">Nenhum jogo encontrado.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -111,20 +150,21 @@
             {{ $games->appends(request()->query())->links() }}
         </div>
     </div>
+@endsection
 
+@push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const deleteForms = document.querySelectorAll('.delete-form');
             
             deleteForms.forEach(form => {
                 form.addEventListener('submit', function (event) {
-                    if (!confirm('{{ __('games.confirm_delete') }}')) {
+                    // Usa a tradução do seu arquivo de lang
+                    if (!confirm('{{ __("games.confirm_delete") }}')) { 
                         event.preventDefault();
                     }
                 });
             });
         });
     </script>
-
-</body>
-</html>
+@endpush
