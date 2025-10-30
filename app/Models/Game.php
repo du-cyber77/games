@@ -17,5 +17,24 @@ class Game extends Model
         'title',
         'developer',
         'release_year',
+        'platform',       // Adicionado
+        'genre',          // Adicionado
+        'status',         // Adicionado
+        'rating',         // Adicionado
+        'cover_image_url',// Adicionado
     ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            // 'release_year' já é integer na migration, mas cast é boa prática
+            'release_year' => 'integer',
+            'rating' => 'integer', // Garante que a nota seja sempre um número
+        ];
+    }
 }
